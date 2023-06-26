@@ -1,0 +1,6 @@
+projectKey=c4diagrama_code
+serverUrl=http://localhost:9000
+serverVersion=9.8.0.63668
+dashboardUrl=http://localhost:9000/dashboard?id=c4diagrama_code
+ceTaskId=AYWFBb5CwRJjBstMy0TZ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYWFBb5CwRJjBstMy0TZ
