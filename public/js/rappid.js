@@ -50063,14 +50063,15 @@ var g, V;
                 return w("<div/>").addClass("stencil-paper-drag");
             },
             renderSearch: function () {
-                return w("<div/>")
+                /* return w("<div/>")
                     .addClass("search-wrap")
                     .append(
                         w("<input/>", {
                             type: "search",
                             placeholder: "buscar",
                         }).addClass("search")
-                    );
+                    ); */
+                    return 
             },
             renderToggleAll: function () {
                 return [

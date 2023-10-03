@@ -32,7 +32,7 @@ App.config = App.config || {};
             'snapline': { index: 10 }
         },
         tools: [
-            {
+            /* {
                 type: 'undo',
                 name: 'undo',
                 group: 'undo-redo',
@@ -55,7 +55,7 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
+            }, */
             {
                 type: 'button',
                 name: 'clear',
@@ -97,7 +97,7 @@ App.config = App.config || {};
                     }
                 }
             }, */
-            {
+           /*  {
                 type: 'button',
                 name: 'print',
                 group: 'print',
@@ -109,7 +109,7 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
+            }, */
             /* {
                 type: 'button',
                 name: 'to-front',
@@ -138,7 +138,7 @@ App.config = App.config || {};
                     }
                 }
             }, */
-            {
+            /* {
                 type: 'button',
                 group: 'layout',
                 name: 'layout',
@@ -150,8 +150,8 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
-            {
+            }, */
+            /* {
                 type: 'zoom-to-fit',
                 name: 'zoom-to-fit',
                 group: 'zoom',
@@ -162,8 +162,8 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
-            {
+            }, */
+            /* {
                 type: 'zoom-out',
                 name: 'zoom-out',
                 group: 'zoom',
@@ -174,8 +174,8 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
-            {
+            }, */
+            /* {
                 type: 'label',
                 name: 'zoom-slider-label',
                 group: 'zoom',
@@ -197,7 +197,7 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            },
+            }, */
             {
                 type: 'separator',
                 group: 'grid'
@@ -246,7 +246,7 @@ App.config = App.config || {};
                     }
                 }
             }, */
-            {
+            /* {
                 type: 'fullscreen',
                 name: 'fullscreen',
                 group: 'fullscreen',
@@ -257,7 +257,7 @@ App.config = App.config || {};
                         'data-tooltip-position-selector': '.toolbar-container'
                     }
                 }
-            }
+            } */
         ]
     };
 })();

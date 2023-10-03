@@ -241,7 +241,8 @@ class DiagramaController extends Controller
     {
         $objeto = Diagrama::find($request->diagrama_id);
         $diagrama = json_decode($objeto->contenido);
-        
+        /* dd($objeto, $diagrama); */
+
         $diagrama = $diagrama->cells;
         $objetos = '';
         $atributos = '';
@@ -256,8 +257,16 @@ class DiagramaController extends Controller
                 $atributos .= $this->attribute($diagrama[$i], $i + 1);
                 $operations .= $this->operation($diagrama[$i], $i + 1);
             } elseif ($diagrama[$i]->type == 'app.Link') {
-                $conecciones .= $this->conector($diagrama[$i], $i + 1);
-                $extensiones .= $this->extension($diagrama[$i], $i + 1);
+                /* dd($diagrama[$i]); */
+                /* if($diagrama[$i]->source->id && $diagrama[$i]->target->id ){
+                    $conecciones .= $this->conector($diagrama[$i], $i + 1);
+                    $extensiones .= $this->extension($diagrama[$i], $i + 1);
+                } */
+                if (property_exists($diagrama[$i]->source, 'id') && property_exists($diagrama[$i]->target, 'id')) {
+                    $conecciones .= $this->conector($diagrama[$i], $i + 1);
+                    $extensiones .= $this->extension($diagrama[$i], $i + 1);
+                }
+                
             } else if ($diagrama[$i]->attrs->contentText->text == "") {
                 $objetos .= $this->boundary($diagrama[$i], $i + 1);
                 $positions .= $this->position($diagrama[$i], $i + 1);
@@ -486,6 +495,8 @@ class DiagramaController extends Controller
         if (count($diagrama->labels) > 0) {
             $label = $diagrama->labels[0]->attrs->text->text;
         }
+       /*  dd($diagrama->source->id, $diagrama->target->id); */
+        /* dd($diagrama); */
         $coneccion = '<Row>
         <Column name="Connector_ID" value="' . $i . '" />
         <Column name="Name" value="' . $label . '" />
@@ -530,6 +541,7 @@ class DiagramaController extends Controller
         <Column name="Target2" value="-1263619272" />
         <Column name="SourceStyle" value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Non-Navigable;" />
         <Column name="DestStyle" value="Union=0;Derived=0;AllowDuplicates=0;Owned=0;Navigable=Navigable;" />
+        
         <Extension Start_Object_ID="{' . $diagrama->source->id . '}" End_Object_ID="{' . $diagrama->target->id . '}" />
         </Row>';
         return $coneccion;

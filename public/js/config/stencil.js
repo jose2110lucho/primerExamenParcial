@@ -21,12 +21,14 @@ App.config = App.config || {};
     App.config.stencil = {};
 
     App.config.stencil.groups = {
-        //standard: { index: 1, label: 'Modelo C4' },
-        /* fsa: { index: 2, label: 'State machine' },
-        pn: { index: 3, label: 'Petri nets' },
-        erd: { index: 4, label: 'Entity-relationship' },
-        */uml: { index: 5, label: 'Componentes' },
-        /*org: { index: 6, label: 'ORG' } */
+        /* standard: { index: 1, label: 'Modelo C4' }, */
+        standard: { index: 1, label: 'componentes' },
+         /* fsa: { index: 2, label: 'State machine' }, */
+        /* pn: { index: 3, label: 'Petri nets' }, */
+       /*  erd: { index: 4, label: 'Entity-relationship' }, */
+        erd: { index: 4, label: 'Simbolo de objeto' },
+       /*  uml: { index: 5, label: 'Componentes' }, */
+        /* org: { index: 6, label: 'ORG' }  */
     };
 
     App.config.stencil.shapes = {};
@@ -38,12 +40,14 @@ App.config = App.config || {};
             size: { width: 53, height: 42 },
             attrs: {
                 root: {
-                    dataTooltip: 'Person 1-2',
+                    /* dataTooltip: 'Person 1-2', */
+                    dataTooltip: 'Actor',
                     dataTooltipPosition: 'left',
                     dataTooltipPositionSelector: '.joint-stencil'
                 },
                 image: {
-                    xlinkHref: `${person}`
+                    /* xlinkHref: `${person}` */
+                    xlinkHref: `http://c4diagram.test/assets/img/actor.jpg`
                 },
                 header: {
                     stroke: '#31d0c6',
@@ -72,22 +76,259 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     strokeDasharray: '0'
                 },
-                /* label: {
+                label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                },
                 headerText: {
-                    text: 'Person name',
-                    fill: '#ffffff',
+                    text: 'actor',
+                    fill: '#000000',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 8,
                     strokeWidth: 0,
-                    refY: "50%"
+                    refY: "110%"
+                },
+                subHeaderText: {
+                    text: '',
+                    fill: '#F9F9F9',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "60%"
+                },
+                contentText: {
+                    text: '',
+                    fill: '#E7E7E7',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "75%"
+                }
+            }
+        },
+        //aqui el boundary
+        {
+            type: 'standard.EmbeddedImage',
+            size: { width: 53, height: 42 },
+            attrs: {
+                root: {
+                    /* dataTooltip: 'Person 1-2', */
+                    dataTooltip: 'Boundary',
+                    dataTooltipPosition: 'left',
+                    dataTooltipPositionSelector: '.joint-stencil'
+                },
+                image: {
+                    /* xlinkHref: `${person}` */
+                    xlinkHref: `http://c4diagram.test/assets/img/boundary.jpg`
+                },
+                header: {
+                    stroke: '#31d0c6',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 20
+                },
+                subHeader: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                content: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                body: {
+                    fill: 'transparent',
+                    stroke: '#31d0c6',
+                    strokeWidth: 0,
+                    strokeDasharray: '0'
+                },
+                label: {
+                    text: 'Container name',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 11,
+                    fill: '#c6c7e2',
+                    refY2: 12,
+                },
+                headerText: {
+                    text: 'boundary',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 8,
+                    strokeWidth: 0,
+                    refY: "110%"
+                },
+                subHeaderText: {
+                    text: '[Person]',
+                    fill: '#F9F9F9',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "60%"
+                },
+                contentText: {
+                    text: 'Description of person.',
+                    fill: '#E7E7E7',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "75%"
+                }
+            }
+        },
+        //aqui el entity
+        {
+            type: 'standard.EmbeddedImage',
+            size: { width: 53, height: 42 },
+            attrs: {
+                root: {
+                    /* dataTooltip: 'Person 1-2', */
+                    dataTooltip: 'Entity',
+                    dataTooltipPosition: 'left',
+                    dataTooltipPositionSelector: '.joint-stencil'
+                },
+                image: {
+                    /* xlinkHref: `${person}` */
+                    xlinkHref: `http://c4diagram.test/assets/img/entity.jpg`
+                },
+                header: {
+                    stroke: '#31d0c6',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 20
+                },
+                subHeader: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                content: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                body: {
+                    fill: 'transparent',
+                    stroke: '#31d0c6',
+                    strokeWidth: 0,
+                    strokeDasharray: '0'
+                },
+                label: {
+                    text: 'Container name',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 11,
+                    fill: '#c6c7e2',
+                    refY2: 12,
+                },
+                headerText: {
+                    text: 'entity',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 8,
+                    strokeWidth: 0,
+                    refY: "110%"
+                },
+                subHeaderText: {
+                    text: '[Person]',
+                    fill: '#F9F9F9',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "60%"
+                },
+                contentText: {
+                    text: 'Description of person.',
+                    fill: '#E7E7E7',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "75%"
+                }
+            }
+        },
+        //aqui el control
+        {
+            type: 'standard.EmbeddedImage',
+            size: { width: 53, height: 42 },
+            attrs: {
+                root: {
+                    /* dataTooltip: 'Person 1-2', */
+                    dataTooltip: 'Control',
+                    dataTooltipPosition: 'left',
+                    dataTooltipPositionSelector: '.joint-stencil'
+                },
+                image: {
+                    /* xlinkHref: `${person}` */
+                    xlinkHref: `http://c4diagram.test/assets/img/control.jpg`
+                },
+                header: {
+                    stroke: '#31d0c6',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 20
+                },
+                subHeader: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                content: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                body: {
+                    fill: 'transparent',
+                    stroke: '#31d0c6',
+                    strokeWidth: 0,
+                    strokeDasharray: '0'
+                },
+                label: {
+                    text: 'Container name',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 11,
+                    fill: '#c6c7e2',
+                    refY2: 12,
+                },
+                headerText: {
+                    text: 'control',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 8,
+                    strokeWidth: 0,
+                    refY: "110%"
                 },
                 subHeaderText: {
                     text: '[Person]',
@@ -110,7 +351,7 @@ App.config = App.config || {};
             }
         },
         /* external person */
-        {
+        /* {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
@@ -149,14 +390,14 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     strokeDasharray: '0'
                 },
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 headerText: {
                     text: 'External person name',
                     fill: '#ffffff',
@@ -183,11 +424,14 @@ App.config = App.config || {};
                     fontSize: 4,
                     strokeWidth: 0,
                     refY: "75%"
-                }
+                },
+                background: {
+                    fill: 'transparent'
+                },
             }
-        },
+        }, */
         /* software system */
-        {
+       /*  {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -225,18 +469,18 @@ App.config = App.config || {};
                     fill: '#1061B0',
                     stroke: '#31d0c6',
                     strokeWidth: 0,
-                    /* strokeDasharray: '5' */
+                     strokeDasharray: '5' 
                 },
-                /* label: {
+                 label: {
                     text: 'rect',
                     fill: '#c6c7e2',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     strokeWidth: 0,
-                    // refY: -4,
-                    // refY2: 4,
-                }, */
+                     refY: -4,
+                     refY2: 4,
+                }, 
                 headerText: {
                     text: 'System name',
                     fill: '#ffffff',
@@ -265,19 +509,12 @@ App.config = App.config || {};
                     refY: "65%"
                 }
                 
-                /* label: {
-                    text: 'Container name',
-                    fontFamily: 'Roboto Condensed',
-                    fontWeight: 'Normal',
-                    fontSize: 11,
-                    fill: '#c6c7e2',
-                    refY2: 12,
-                }, */
+                
                 
             }
-        },
+        }, */
         /* external software system */
-        {
+        /* {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -315,9 +552,9 @@ App.config = App.config || {};
                     fill: '#8C8496',
                     stroke: '#31d0c6',
                     strokeWidth: 0,
-                    /* strokeDasharray: '5' */
+                     strokeDasharray: '5' 
                 },
-                /* label: {
+                 label: {
                     text: 'rect',
                     fill: '#c6c7e2',
                     fontFamily: 'Roboto Condensed',
@@ -326,7 +563,7 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     // refY: -4,
                     // refY2: 4,
-                }, */
+                }, 
                 headerText: {
                     text: 'External system name',
                     fill: '#ffffff',
@@ -355,19 +592,19 @@ App.config = App.config || {};
                     refY: "65%"
                 }
                 
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 
             }
-        },
+        }, */
         /* container */
-        {
+        /* {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -405,9 +642,9 @@ App.config = App.config || {};
                     fill: '#23A2D9',
                     stroke: '#31d0c6',
                     strokeWidth: 0,
-                    /* strokeDasharray: '3' */
+                     strokeDasharray: '3' 
                 },
-                /* label: {
+                 label: {
                     text: 'rect',
                     fill: '#c6c7e2',
                     fontFamily: 'Roboto Condensed',
@@ -416,7 +653,7 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     // refY: -4,
                     // refY2: 4,
-                }, */
+                }, 
                 headerText: {
                     text: 'Container name',
                     fill: '#ffffff',
@@ -445,19 +682,19 @@ App.config = App.config || {};
                     refY: "65%"
                 }
                 
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 
             }
-        }, 
+        },  */
         /* container DB vertical*/
-        {
+        /* {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
@@ -496,14 +733,14 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     strokeDasharray: '0'
                 },
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 headerText: {
                     text: 'Container name',
                     fill: '#ffffff',
@@ -532,9 +769,9 @@ App.config = App.config || {};
                     refY: "63%"
                 }
             }
-        },
+        }, */
         /* container microservice type*/
-        {
+        /* {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
@@ -573,14 +810,14 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     strokeDasharray: '0'
                 },
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 headerText: {
                     text: 'Container name',
                     fill: '#ffffff',
@@ -609,9 +846,9 @@ App.config = App.config || {};
                     refY: "65%"
                 }
             }
-        },
+        }, */
         /* container message bus type horizontal cilinder*/
-        {
+        /* {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
@@ -650,14 +887,14 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     strokeDasharray: '0'
                 },
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 headerText: {
                     text: 'Container name',
                     fill: '#ffffff',
@@ -686,9 +923,9 @@ App.config = App.config || {};
                     refY: "60%"
                 }
             }
-        },
+        }, */
         /* container web browser */
-        {
+        /* {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
@@ -721,20 +958,20 @@ App.config = App.config || {};
                     strokeDasharray: '0',
                     height: 0
                 },
-                /* body: {
+                 body: {
                     fill: 'transparent',
                     stroke: '#31d0c6',
                     strokeWidth: 0,
                     strokeDasharray: '0'
-                }, */
-                /* label: {
+                }, 
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 headerText: {
                     text: 'Container name',
                     fill: '#ffffff',
@@ -763,9 +1000,9 @@ App.config = App.config || {};
                     refY: "62%"
                 }
             }
-        },
+        }, */
         /* component */
-        {
+        /* {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -803,9 +1040,9 @@ App.config = App.config || {};
                     fill: '#63BEF2',
                     stroke: '#31d0c6',
                     strokeWidth: 0,
-                    /* strokeDasharray: '5' */
+                    // strokeDasharray: '5' 
                 },
-                /* label: {
+                 label: {
                     text: 'rect',
                     fill: '#c6c7e2',
                     fontFamily: 'Roboto Condensed',
@@ -814,7 +1051,7 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     // refY: -4,
                     // refY2: 4,
-                }, */
+                }, 
                 headerText: {
                     text: 'Component name',
                     fill: '#ffffff',
@@ -843,24 +1080,25 @@ App.config = App.config || {};
                     refY: "65%"
                 }
                 
-                /* label: {
+                 label: {
                     text: 'Container name',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
                     fontSize: 11,
                     fill: '#c6c7e2',
                     refY2: 12,
-                }, */
+                }, 
                 
             }
-        },
+        }, */
         /* container software system transparent */
         {
             type: 'standard.Rectangle',
             size: { width: 40, height: 35 },
             attrs: {
                 root: {
-                    dataTooltip: 'System scope boundary 1-2-3',
+                    /* dataTooltip: 'System scope boundary 1-2-3', */
+                    dataTooltip: 'Símbolo de bucle de opción',
                     dataTooltipPosition: 'left',
                     dataTooltipPositionSelector: '.joint-stencil'
                 },
@@ -893,28 +1131,28 @@ App.config = App.config || {};
                     fill: 'transparent',
                     stroke: '#666666',
                     strokeWidth: 1,
-                    strokeDasharray: '5'
+                    strokeDasharray: '0'
                 },
                 headerText: {
-                    text: 'Software System',
+                    text: 'Loop',
                     fill: '#000000',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
-                    fontSize: 8,
+                    fontSize: 10,
                     strokeWidth: 0,
-                    refY: "90%",
+                    refY: "-3%",
                     refX: "4%",
                     textVerticalAnchor: "bottom",
                     textAnchor: "bottom",
                 },
                 subHeaderText: {
-                    text: '[Software System]',
+                    text: '[condition]',
                     fill: '#000000',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
-                    fontSize: 4,
+                    fontSize: 5,
                     strokeWidth: 0,
-                    refY: "95%",
+                    refY: "25%",
                     refX: "4%",
                     textVerticalAnchor: "bottom",
                     textAnchor: "bottom",
@@ -949,7 +1187,7 @@ App.config = App.config || {};
             size: { width: 40, height: 35 },
             attrs: {
                 root: {
-                    dataTooltip: 'Container scope boundary 1-2-3',
+                    dataTooltip: 'casilla de activacion',
                     dataTooltipPosition: 'left',
                     dataTooltipPositionSelector: '.joint-stencil'
                 },
@@ -982,7 +1220,7 @@ App.config = App.config || {};
                     fill: 'transparent',
                     stroke: '#666666',
                     strokeWidth: 1,
-                    strokeDasharray: '5'
+                    strokeDasharray: '0'
                 },
                 /* label: {
                     text: 'rect',
@@ -995,7 +1233,7 @@ App.config = App.config || {};
                     // refY2: 4,
                 }, */
                 headerText: {
-                    text: 'Container name',
+                    text: '',
                     fill: '#000000',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
@@ -1007,7 +1245,7 @@ App.config = App.config || {};
                     textAnchor: "bottom",
                 },
                 subHeaderText: {
-                    text: '[Container]',
+                    text: '',
                     fill: '#000000',
                     fontFamily: 'Roboto Condensed',
                     fontWeight: 'Normal',
@@ -1043,7 +1281,7 @@ App.config = App.config || {};
             }
         },
         /* Main circle */
-        {
+        /* {
             type: 'standard.InscribedImage',
             size: { width: 30, height: 30 },
             attrs: {
@@ -1072,9 +1310,9 @@ App.config = App.config || {};
                     strokeWidth: 0
                 }
             }
-        },
+        }, */
         /* Code content */
-        {
+        /* {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -1143,15 +1381,79 @@ App.config = App.config || {};
                     strokeWidth: 0,
                     refY: "80%",
                 }, 
+                
+            }
+        }, */
+        /* alternative if else */
+        {
+            type: 'standard.Rectangle',
+            size: { width: 5, height: 3 },
+            attrs: {
+                root: {
+                    /* dataTooltip: 'Main Content Code 4', */
+                    dataTooltip: 'Símbolo de alternativas',
+                    dataTooltipPosition: 'left',
+                    dataTooltipPositionSelector: '.joint-stencil'
+                },
+                header: {
+                    stroke: '#000000',
+                    fill: 'transparent',
+                    strokeWidth: 1,
+                    strokeDasharray: '4,3', // Define un patrón de guiones (2 unidades de línea, 2 unidades de espacio).
+                    height: 1.5, // Altura del encabezado.
+                    refY: "50%", // Posición de referencia vertical del encabezado.
+                },
+                body: {
+                    rx: 2,
+                    ry: 2,
+                    width: 5,
+                    height: 1.5,
+                    fill: 'transparent',
+                    stroke: '#000000',
+                    strokeWidth: 1,
+                    strokeDasharray: '0', // Deja la línea del cuerpo sólida.
+                },
+                headerText: {
+                    text: 'Alternative',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 10,
+                    strokeWidth: 0,
+                    //refY: "100%", // Posición de referencia vertical del texto en el encabezado.
+                    refY: "-10%",
+                    refX: "12%",
+                },
+                subHeaderText: {
+                    text: '[condition]',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 5,
+                    strokeWidth: 0,
+                    refY: "20%",
+                },
+                contentText: {
+                    text: 'else',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 5,
+                    strokeWidth: 0,
+                    refY: "80%",
+                }, 
             }
         },
+
+        
         /* Package */
         {
             type: 'standard.EmbeddedImage',
             size: { width: 53, height: 42 },
             attrs: {
                 root: {
-                    dataTooltip: 'Package Code 4',
+                    /* dataTooltip: 'Package Code 4', */
+                    dataTooltip: 'Símbolo de paquete',
                     dataTooltipPosition: 'left',
                     dataTooltipPositionSelector: '.joint-stencil'
                 },
@@ -1267,8 +1569,8 @@ App.config = App.config || {};
                     refY: "40%"
                 }
             }
-        }, */
-        /* {
+        }, */ 
+         /* {
             type: 'standard.InscribedImage',
             size: { width: 1, height: 1 },
             attrs: {
@@ -1297,8 +1599,8 @@ App.config = App.config || {};
                     strokeWidth: 0
                 }
             }
-        }, */
-        /* {
+        }, */ 
+        /*  {
             type: 'standard.HeaderedRectangle',
             size: { width: 5, height: 3 },
             attrs: {
@@ -1344,9 +1646,9 @@ App.config = App.config || {};
                     refY: 12
                 }
             }
-        } */
+        } */ 
     ];
-/* 
+
     App.config.stencil.shapes.fsa = [
 
         {
@@ -1430,7 +1732,7 @@ App.config = App.config || {};
         }
     ];
 
-    App.config.stencil.shapes.pn = [
+    /* App.config.stencil.shapes.pn = [
 
         {
             type: 'pn.Place',
@@ -1488,7 +1790,7 @@ App.config = App.config || {};
                 }
             }
         }
-    ];
+    ]; */
 
     App.config.stencil.shapes.erd = [
 
@@ -1496,7 +1798,8 @@ App.config = App.config || {};
             type: 'erd.Entity',
             attrs: {
                 root: {
-                    dataTooltip: 'Entity',
+                    /* dataTooltip: 'Entity', */
+                    dataTooltip: 'Símbolo de objeto',
                     dataTooltipPosition: 'left',
                     dataTooltipPositionSelector: '.joint-stencil'
                 },
@@ -1509,7 +1812,7 @@ App.config = App.config || {};
                     'stroke-dasharray': '0'
                 },
                 text: {
-                    text: 'Entity',
+                    text: 'Object',
                     'font-size': 11,
                     'font-family': 'Roboto Condensed',
                     'font-weight': 'Normal',
@@ -1518,7 +1821,7 @@ App.config = App.config || {};
                 }
             }
         },
-        {
+        /* {
             type: 'erd.WeakEntity',
             attrs: {
                 root: {
@@ -1548,8 +1851,8 @@ App.config = App.config || {};
                     'stroke-width': 0
                 }
             }
-        },
-        {
+        }, */
+        /* {
             type: 'erd.Relationship',
             attrs: {
                 root: {
@@ -1572,8 +1875,8 @@ App.config = App.config || {};
                     'stroke-width': 0
                 }
             }
-        },
-        {
+        }, */
+        /* {
             type: 'erd.IdentifyingRelationship',
             attrs: {
                 root: {
@@ -1600,8 +1903,8 @@ App.config = App.config || {};
                     'stroke-width': 0
                 }
             }
-        },
-        {
+        }, */
+        /* {
             type: 'erd.ISA',
             attrs: {
                 root: {
@@ -1734,10 +2037,10 @@ App.config = App.config || {};
                     'stroke-width': 0
                 }
             }
-        }
+        } */
     ];
-*/
-    App.config.stencil.shapes.uml = [
+
+    /* App.config.stencil.shapes.uml = [
 
         {
             type: 'uml.Class',
@@ -1978,9 +2281,9 @@ App.config = App.config || {};
                 }
             }
         }
-    ];
-/*
-    App.config.stencil.shapes.org = [
+    ]; */
+
+    /* App.config.stencil.shapes.org = [
 
         {
             type: 'org.Member',
@@ -2024,6 +2327,6 @@ App.config = App.config || {};
                 }
             }
         }
-    ];
- */
+    ]; */
+
 })();

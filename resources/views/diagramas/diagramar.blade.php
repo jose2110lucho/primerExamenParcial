@@ -56,7 +56,7 @@
                             </div>
 
                             @if ($diagrama->proyecto->user_id == Auth::user()->id)
-                                {{-- <div class="col-auto mx-0 px-1 pt-2">
+                                <div class="col-auto mx-0 px-1 pt-2">
                                     <a href="{{ route('diagramas.descargar', $diagrama->id) }}" class="btn btn-primary"
                                         title="Guardar copia de seguridad">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -69,8 +69,8 @@
                                         </svg>
                                         Guardar
                                     </a>
-                                </div> --}}
-                                {{-- <div class="col-auto mx-0 px-1 pt-2">
+                                </div>
+                                <div class="col-auto mx-0 px-1 pt-2">
                                     <form action="{{ route('architect') }}" method="POST">
                                         @csrf
                                         <input type="text" name="diagrama_id" hidden value="{{ $diagrama->id }}">
@@ -80,13 +80,13 @@
                                         </button>
                                     </form>
 
-                                </div> --}}
-                                {{-- <div class="col-auto mx-0 px-1 pt-2">
+                                </div>
+                                <div class="col-auto mx-0 px-1 pt-2">
                                     <a href="#" class="btn btn-orange d-none d-sm-inline-block"
                                         data-bs-toggle="modal" data-bs-target="#modal-report">
                                         Importar
                                     </a>
-                                </div> --}}
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -98,7 +98,7 @@
     </div>
     <div id="app">
         <div class="app-header">
-            <div class="app-title" style="background-color: rgb(235, 235, 235)">
+            <div class="app-title" style="background-color: rgb(180, 180, 180)">
                 <img src="{{ asset('assets/img/UML_icon.png') }}" height="70px" alt="">
             </div>
             <div class="toolbar-container"></div>

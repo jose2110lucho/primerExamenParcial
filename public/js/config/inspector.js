@@ -109,10 +109,11 @@ App.config = App.config || {};
 
         arrowheadSize: [
            
-             { value: 'M 0 -5 -10 0 0 5 z', content: 'Asociacion' },
-             { value: 'M 0 -10 -15 0 0 10 z', content: 'Herencia' },
+             { value: 'M 0 -5 -10 0 0 5 z', content: 'flecha de mensaje' },   
+             { value: 'M 0 0 1 0 ', content: 'linea de vida' },
+             /* { value: 'M 0 -10 -15 0 0 10 z', content: 'Herencia' },
              { value: 'M -10 0 0 10 10 0 0 -10 z', content: 'Agregacion' },
-             { value: 'M -10 0 0 10 10 0 0 -10 z', content: 'Composicion' },
+             { value: 'M -10 0 0 10 10 0 0 -10 z', content: 'Composicion' }, */
         ],
 
         strokeWidth: [
