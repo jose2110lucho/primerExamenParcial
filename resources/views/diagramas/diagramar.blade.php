@@ -6,6 +6,20 @@
             <div class="page-header d-print-none">
                 <div class="row g-2 align-items-center">
                     <div class="col">
+
+
+                    @if(isset($message))
+
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                    @endif    
+
+
                         <h2 class="page-title">
                             Proyecto: {{ $proyecto->nombre }}
                         </h2>
@@ -55,8 +69,32 @@
                                 </a>
                             </div>
 
+                            <div class="col-auto">
+                                <a href="{{ route('diagramas.generarJavaCode', $diagrama) }}" class="btn btn-white"
+                                    title="JAVA">
+                                    <img src="{{ asset('/assets/img/javaIcon.png') }}"
+                                                width="75">
+                                </a>
+                            </div>
+
+                            <div class="col-auto">
+                                <a href="{{ route('diagramas.generarCCode', $diagrama) }}" class="btn btn-white"
+                                    title="C#">
+                                    <img src="{{ asset('/assets/img/cIcon.png') }}"
+                                                width="75" >
+                                </a>
+                            </div>
+
+                            <div class="col-auto">
+                                <a href="{{ route('diagramas.generarDartCode', $diagrama) }}" class="btn btn-white"
+                                    title="DART">
+                                    <img src="{{ asset('/assets/img/dartIcon.png') }}"
+                                                width="75" height="70" >
+                                </a>
+                            </div>
+
                             @if ($diagrama->proyecto->user_id == Auth::user()->id)
-                                <div class="col-auto mx-0 px-1 pt-2">
+                                {{-- <div class="col-auto mx-0 px-1 pt-2">
                                     <a href="{{ route('diagramas.descargar', $diagrama->id) }}" class="btn btn-primary"
                                         title="Guardar copia de seguridad">
                                         <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
@@ -69,9 +107,9 @@
                                         </svg>
                                         Guardar
                                     </a>
-                                </div>
-                                <div class="col-auto mx-0 px-1 pt-2">
-                                    <form action="{{ route('architect') }}" method="POST">
+                                </div> --}}
+                                {{-- <div class="col-auto mx-0 px-1 pt-2">
+                                    <form action="{{ route('probandoesto') }}" method="POST">
                                         @csrf
                                         <input type="text" name="diagrama_id" hidden value="{{ $diagrama->id }}">
                                         <button class="btn btn-blue" type="submit" title="Exportar para architect">
@@ -80,15 +118,21 @@
                                         </button>
                                     </form>
 
-                                </div>
-                                <div class="col-auto mx-0 px-1 pt-2">
+                                </div> --}}
+                                {{-- <div class="col-auto mx-0 px-1 pt-2">
                                     <a href="#" class="btn btn-orange d-none d-sm-inline-block"
                                         data-bs-toggle="modal" data-bs-target="#modal-report">
                                         Importar
                                     </a>
-                                </div>
+                                </div> --}}
+
+                                
+
                             @endif
+
                         </div>
+
+                        
                     </div>
 
 

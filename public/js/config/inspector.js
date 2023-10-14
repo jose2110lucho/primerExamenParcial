@@ -448,7 +448,7 @@ App.config = App.config || {};
                     headerText: {
                         text: {
                             type: 'content-editable',
-                            label: 'Text',
+                            label: 'Clase',
                             group: 'headerText',
                             index: 1
                         },
@@ -480,7 +480,7 @@ App.config = App.config || {};
                         },
                         fill: {
                             type: 'color-palette',
-                            options: options.colorPalette,
+                            options: options.colorPalette, 
                             label: 'Fill',
                             group: 'headerText',
                             when: { ne: { 'attrs/headerText/text': '' }},
@@ -579,7 +579,8 @@ App.config = App.config || {};
                     index: 1
                 },
                 headerText: {
-                    label: 'Header Text',
+                    /* label: 'Header Text', */
+                    label: 'pertenece a',
                     index: 2
                 },
                 /* text: {

@@ -1384,7 +1384,86 @@ App.config = App.config || {};
                 
             }
         }, */
-        /* alternative if else */
+        /* simbolo de eliminar mensaje */
+        {
+            type: 'standard.EmbeddedImage',
+            size: { width: 53, height: 42 },
+            attrs: {
+                root: {
+                    /* dataTooltip: 'Person 1-2', */
+                    dataTooltip: 'Simbolo de eliminar mensaje',
+                    dataTooltipPosition: 'left',
+                    dataTooltipPositionSelector: '.joint-stencil'
+                },
+                image: {
+                    /* xlinkHref: `${person}` */
+                    xlinkHref: `http://c4diagram.test/assets/img/deleteMessage.png`
+                },
+                header: {
+                    stroke: '#31d0c6',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 20
+                },
+                subHeader: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                content: {
+                    stroke: 'transparent',
+                    fill: 'transparent',
+                    strokeWidth: 0,
+                    strokeDasharray: '0',
+                    height: 0
+                },
+                body: {
+                    fill: 'transparent',
+                    stroke: '#31d0c6',
+                    strokeWidth: 0,
+                    strokeDasharray: '0'
+                },
+                label: {
+                    text: 'Container name',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 11,
+                    fill: '#c6c7e2',
+                    refY2: 12,
+                },
+                headerText: {
+                    text: 'actor',
+                    fill: '#000000',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 8,
+                    strokeWidth: 0,
+                    refY: "110%"
+                },
+                subHeaderText: {
+                    text: '',
+                    fill: '#F9F9F9',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "60%"
+                },
+                contentText: {
+                    text: '',
+                    fill: '#E7E7E7',
+                    fontFamily: 'Roboto Condensed',
+                    fontWeight: 'Normal',
+                    fontSize: 4,
+                    strokeWidth: 0,
+                    refY: "75%"
+                }
+            }
+        },
+
         {
             type: 'standard.Rectangle',
             size: { width: 5, height: 3 },
@@ -1444,7 +1523,6 @@ App.config = App.config || {};
                 }, 
             }
         },
-
         
         /* Package */
         {

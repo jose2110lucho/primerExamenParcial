@@ -7,9 +7,12 @@ use App\Models\Diagrama;
 use App\Models\Proyecto;
 use App\Models\User;
 use App\Models\User_diagrama;
+use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Isset_;
+use SimpleXMLElement;
 
 class DiagramaController extends Controller
 {
@@ -244,6 +247,8 @@ class DiagramaController extends Controller
         /* dd($objeto, $diagrama); */
 
         $diagrama = $diagrama->cells;
+        /* return $diagrama; */
+
         $objetos = '';
         $atributos = '';
         $operations = '';
@@ -388,6 +393,79 @@ class DiagramaController extends Controller
         fclose($ar);
         return response()->download($path);
         /* ["Table"][0]["Row"]["Column"] */ /* ->Table[0]->attributes->name */
+    }
+
+
+
+    //demo
+
+    public function architect1(Request $request)
+    {
+        
+        $objeto = Diagrama::find($request->diagrama_id);
+        $diagrama = json_decode($objeto->contenido);
+        /* dd($objeto, $diagrama); */
+
+        $diagrama = $diagrama->cells;
+
+        $data = $diagrama;
+        
+        
+
+        $xml = new DOMDocument();
+        $xml->loadXML('<model><elements></elements></model>');
+
+        foreach ($data as $key => $item) {
+            $element = $xml->createElement('element');
+            $element->setAttribute('type', $item->type);
+
+            $position = $xml->createElement('position');
+
+            if(isset($item->position)){
+                $position->setAttribute('x', $item->position->x);
+                $position->setAttribute('y', $item->position->y);
+                $element->appendChild($position);
+            }
+            
+            if(isset($item->size)){
+                $size = $xml->createElement('size');
+                $size->setAttribute('width', $item->size->width);
+                $size->setAttribute('height', $item->size->height);
+                $element->appendChild($size);
+            }
+            
+            if(isset($item->angle)){
+                $angle = $xml->createElement('angle', $item->angle);
+                $element->appendChild($angle);
+            }
+            
+            if(isset($item->id)){
+                $id = $xml->createElement('id', $item->id);
+                $element->appendChild($id);
+            }
+            
+            if(isset($item->z)){
+                $z = $xml->createElement('z', $item->z);
+                $element->appendChild($z);
+            }
+            
+
+            if (isset($item->attrs)) {
+                foreach ($item->attrs as $key => $value) {
+                    $attr = $xml->createElement($key);
+                    foreach ($value as $k => $v) {
+                        $attr->setAttribute($k, json_encode($v));
+                    }
+                    $element->appendChild($attr);
+                }
+            }
+
+            $xml->documentElement->appendChild($element);
+        }
+        
+        $xml->save('xml.xml');
+        dd($xml);
+        
     }
 
     public function objeto($diagrama, $i)
@@ -601,4 +679,575 @@ class DiagramaController extends Controller
         </Row>';
         return $boundary;
     }
+
+    public function script(Diagrama $diagrama)
+    {
+        $nombre = $diagrama->nombre;
+        $contenido = json_decode($diagrama->contenido);
+       
+        $cell = $contenido->cells;                
+        //dd($cell);
+        $sql = 'create database ' .$nombre. ';'.PHP_EOL.' use ' .$nombre. ';'.PHP_EOL.PHP_EOL;
+
+        
+        for ($i = 0; $i < count($cell); $i++) {
+            $primary = '';
+            $c = 0;
+            if ($cell[$i]->type == 'uml.Class' ) {
+                if(count($cell[$i]->attributes) != 0){
+                    $sql .= 'create table '. $cell[$i]->name. '( '.PHP_EOL;
+                    
+                    $atri = $cell[$i]->attributes;
+                    for ($j = 0; $j < count($atri); $j++) {   
+
+                        if(str_contains($atri[$j], 'Pk')|| str_contains($atri[$j], 'PK')){
+                            if($c == 0){
+                                $pieces = explode(" ", $atri[$j]);
+                                $primary = $pieces[0] ;
+                                $c++;
+                            }else{
+                                $pieces = explode(" ", $atri[$j]);
+                                $primary .= ', '.$pieces[0] ;
+                            }
+                                
+                        }   
+
+                        if(str_contains($atri[$j], 'Fk')|| str_contains($atri[$j], 'FK')|| str_contains($atri[$j], 'fk')){
+                            if($j == count($atri)-1){
+                                $pieces = explode(" ", $atri[$j]);
+                                if(str_contains($pieces[0], '_')){
+                                    $foranea = explode("_", $pieces[0]);
+                                    $sql .= ' '.$pieces[0]. ' ' .$pieces[1].', '.PHP_EOL.'primary key(' .$primary.'), '.PHP_EOL.' FOREIGN KEY ('.$pieces[0].') REFERENCES '.$foranea[1].'('.$foranea[0].') ON DELETE CASCADE  ON UPDATE CASCADE);'.PHP_EOL;
+                                }else{
+                                    $sql .= 'foranea mal definida'.PHP_EOL;
+                                }
+                            }else{
+                                $pieces = explode(" ", $atri[$j]);
+                                if(str_contains($pieces[0], '_')){
+                                    $foranea = explode("_", $pieces[0]);
+                                    $sql .= ' ' .$pieces[0].' ' .$pieces[1]. ','.PHP_EOL.' FOREIGN KEY ('.$pieces[0].') REFERENCES '.$foranea[1].'('.$foranea[0].') ON DELETE CASCADE ON UPDATE CASCADE);'.PHP_EOL;
+                                }else{
+                                    $sql .= 'foranea mal definida'.PHP_EOL;
+                                }    
+                            }
+
+                        }else{
+                            if($j == count($atri)-1){
+                                $pieces = explode(" ", $atri[$j]);
+                                $sql .= ' '.$pieces[0]. ' ' .$pieces[1].', '.PHP_EOL.' primary key(' .$primary.') '.PHP_EOL.' );'.PHP_EOL;
+                            }else{
+                                $pieces = explode(" ", $atri[$j]);
+                                $sql .= ' ' .$pieces[0].' ' .$pieces[1]. ','.PHP_EOL;
+                            }
+                        }            
+                    }
+                }
+            } 
+        }
+
+        $path = 'script.sql';
+        $th = fopen("script.sql", "w");
+        fclose($th);
+        $ar = fopen("script.sql", "a") or die("Error al crear");
+        fwrite($ar, $sql);
+        fclose($ar);
+        return response()->download($path);
+    }
+
+
+
+    public function generarJavaCode(Diagrama $diagrama){
+        $nombre = $diagrama->nombre;
+        $contenido = json_decode($diagrama->contenido); //arroja en formato json la info de las componentes graficas del diagrama
+        
+        /* dd($contenido); */
+
+        $elementos = $contenido->cells; //especificamos la var elementos como la var que accedera a la info de los componentes
+        /* dd($elementos); */
+          
+        $clases = []; //declaramos un array para guardar el nombre de todas las clases que se generen del diagrama
+        $metodos = []; //declaramos un array para guardar el nombre de todas los metodos que se generen del diagrama
+
+        
+        foreach ($elementos as $element) { // vamos a recorrer el array de objetos que estan en formato json (componentes del diagrama)
+            if($element->type == 'standard.EmbeddedImage' or $element->type == 'erd.Entity'){ // preguntamos si el elemento es de tipo actor, boundary, control o entity 
+
+                if($element->type == 'standard.EmbeddedImage'){
+
+                    $clases[$element->id] = $element->attrs->headerText->text; //vamos a guardar en el array de clases, el nombre de la clase en la posicion determinada por el id del objeto
+
+                }else{
+                    $clases[$element->id] = $element->attrs->text->text;
+                }
+                /* dd($clases[$element->id]); */
+
+            }else if($element->type == 'app.Link'){  //preguntamos si el elemento es del tipo flecha o conector
+               
+                if(isset($element->id)){  // preguntamos si la flecha o connector tiene un atributo id y este no es nulo
+                  
+                   if(count($element->labels) > 0){ // preguntamos si la felcha o connector tiene una etiqueta(esa etiqueta representa una funcion/metodo)
+
+                        $cadenaMetodo = $element->labels[0]->attrs->text->text; //asignamos a una variable la cadena que representa a esa funcion/metodo
+
+                        // Patrón de expresión regular para encontrar el nombre de la función y los parámetros
+                        $patron = '/^(\w+)\(([^)]*)\)$/'; // validamos que la cadena tenga la forma: nombrefuncion(tipo parametro, tipo parametro)
+
+                        // Realizar la coincidencia con la expresión regular
+                        if (preg_match($patron, $cadenaMetodo, $coincidencias)) {  // preguntamos si la cadena que representa a la funcion/metodo cumple con el patron descrito 
+                            // El nombre de la función se encuentra en $coincidencias[1]
+                            $nombreFuncion = $coincidencias[1];
+
+                            // Los parámetros se encuentran en $coincidencias[2]
+                            $parametros = explode(',', $coincidencias[2]); // array de subcadenas llamado $parametros que guarda los parametros de la funcion/metodo
+
+                            $parametros = array_map('trim', $parametros); // eliminamos los espacios en blanco al principio y al final de cada parametro de la funcion/metodo y  lo volvemos a cqrgar en el array $parametros
+
+                            $parametrosFormateados = []; //declaramos una array vacio para guardar los parametros 'tipo parametro' con el formato de java
+
+                            foreach ($parametros as $parametro) { // recorremos el array $parametros 
+                                
+                                $arrayParametro = explode(' ', $parametro); // creamos un array de subcadenas donde guardamos el tipo del parametro y el parametro
+
+                                if( strtolower($arrayParametro[0]) == 'int'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "int {$arrayParametro[1]}"; // inserta en el array con la forma "int parametro"
+                                     
+                                }else if(strtolower($arrayParametro[0]) == 'string'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "String {$arrayParametro[1]}"; // inserta en el array con la forma "String parametro"
+
+                                }else if(strtolower($arrayParametro[0]) == 'boolean'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "boolean {$arrayParametro[1]}"; // inserta en el array con la forma "boolean parametro"
+
+                                }
+                                
+                            }
+
+                            $var = implode(',', $parametrosFormateados); // aqui unimos en una sola cadena separada por comas los elementos del array $parametrosFormateados
+
+                            $targetID = $element->target->id; //guarda el id de la flecha que coincide con el id de la casilla de activacion que contiene el nombre de la clase a la que pertenece el metodo que viaja en la flecha
+
+                            $nombreDeClaseAquePertenece = "";
+
+                            foreach ($elementos as $e) {
+                                if($e->type == 'standard.Rectangle'){
+                                    if($e->id == $targetID){
+                                        $nombreDeClaseAquePertenece = $e->attrs->headerText->text; 
+                                        break;
+                                    }
+                                }
+                            }
+
+
+
+
+                            $metodos[$nombreDeClaseAquePertenece][] = "public void {$nombreFuncion}({$var}){\n}";
+
+                            /* dd($metodos); */
+                            
+                        } 
+                    
+
+                   } 
+
+
+                   
+                }
+                
+            }
+            
+        } 
+
+
+        
+
+        /* dd($metodos); */
+
+        $nombresClases = array_values($clases);
+
+        /* dd($nombresClases); */
+
+
+
+
+        $formatoClase = [];
+
+        foreach ($nombresClases as $clase) {
+
+            $mayus = ucfirst($clase);
+            if(isset($metodos[$clase])){
+                $variable = implode("\n", $metodos[$clase]);
+                $formatoClase[$mayus]  = "public class {$mayus} { \n $variable\n}" ;
+            }else{
+                $formatoClase[$mayus]  = "public class {$mayus} {\n}" ;
+            }
+            
+
+        }
+
+        /* dd($formatoClase); */
+
+
+        //
+            $directorioDestino = "C:/Users/Pepe/Downloads/aqui/";
+
+            // Verifica si el directorio de destino existe y, si no, créalo
+            if (!is_dir($directorioDestino)) {
+                mkdir($directorioDestino, 0777, true);
+            }
+
+            foreach ($formatoClase as $key => $class) {
+                // Genera un nombre de archivo único para cada class
+                $nombreArchivo = $directorioDestino.$key.".java";
+
+                // Abre el archivo para escritura
+                $archivo = fopen($nombreArchivo, 'w');
+
+                if ($archivo) {
+                    // Escribe el class en el archivo
+                    fwrite($archivo, $class);
+                    
+                    // Cierra el archivo
+                    fclose($archivo);
+                    
+                    
+                } 
+            }
+            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en JAVA');
+        //
+
+    }
+    
+    public function generarCCode(Diagrama $diagrama){
+        $nombre = $diagrama->nombre;
+        $contenido = json_decode($diagrama->contenido); //arroja en formato json la info de las componentes graficas del diagrama
+        
+        /* dd($contenido); */
+
+        $elementos = $contenido->cells; //especificamos la var elementos como la var que accedera a la info de los componentes
+        /* dd($elementos); */
+          
+        $clases = []; //declaramos un array para guardar el nombre de todas las clases que se generen del diagrama
+        $metodos = []; //declaramos un array para guardar el nombre de todas los metodos que se generen del diagrama
+
+        
+        foreach ($elementos as $element) { // vamos a recorrer el array de objetos que estan en formato json (componentes del diagrama)
+            if($element->type == 'standard.EmbeddedImage' or $element->type == 'erd.Entity'){ // preguntamos si el elemento es de tipo actor, boundary, control o entity 
+
+                if($element->type == 'standard.EmbeddedImage'){
+
+                    $clases[$element->id] = $element->attrs->headerText->text; //vamos a guardar en el array de clases, el nombre de la clase en la posicion determinada por el id del objeto
+
+                }else{
+                    $clases[$element->id] = $element->attrs->text->text;
+                }
+                /* dd($clases[$element->id]); */
+
+            }else if($element->type == 'app.Link'){  //preguntamos si el elemento es del tipo flecha o conector
+               
+                if(isset($element->id)){  // preguntamos si la flecha o connector tiene un atributo id y este no es nulo
+                  
+                   if(count($element->labels) > 0){ // preguntamos si la felcha o connector tiene una etiqueta(esa etiqueta representa una funcion/metodo)
+
+                        $cadenaMetodo = $element->labels[0]->attrs->text->text; //asignamos a una variable la cadena que representa a esa funcion/metodo
+
+                        // Patrón de expresión regular para encontrar el nombre de la función y los parámetros
+                        $patron = '/^(\w+)\(([^)]*)\)$/'; // validamos que la cadena tenga la forma: nombrefuncion(tipo parametro, tipo parametro)
+
+                        // Realizar la coincidencia con la expresión regular
+                        if (preg_match($patron, $cadenaMetodo, $coincidencias)) {  // preguntamos si la cadena que representa a la funcion/metodo cumple con el patron descrito 
+                            // El nombre de la función se encuentra en $coincidencias[1]
+                            $nombreFuncion = $coincidencias[1];
+
+                            // Los parámetros se encuentran en $coincidencias[2]
+                            $parametros = explode(',', $coincidencias[2]); // array de subcadenas llamado $parametros que guarda los parametros de la funcion/metodo
+
+                            $parametros = array_map('trim', $parametros); // eliminamos los espacios en blanco al principio y al final de cada parametro de la funcion/metodo y  lo volvemos a cqrgar en el array $parametros
+
+                            $parametrosFormateados = []; //declaramos una array vacio para guardar los parametros 'tipo parametro' con el formato de java
+
+                            foreach ($parametros as $parametro) { // recorremos el array $parametros 
+                                
+                                $arrayParametro = explode(' ', $parametro); // creamos un array de subcadenas donde guardamos el tipo del parametro y el parametro
+
+                                if( strtolower($arrayParametro[0]) == 'int'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "int {$arrayParametro[1]}"; // inserta en el array con la forma "int parametro"
+                                     
+                                }else if(strtolower($arrayParametro[0]) == 'string'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "string {$arrayParametro[1]}"; // inserta en el array con la forma "String parametro"
+
+                                }else if(strtolower($arrayParametro[0]) == 'bool'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "bool {$arrayParametro[1]}"; // inserta en el array con la forma "boolean parametro"
+
+                                }
+                                
+                            }
+
+                            $var = implode(',', $parametrosFormateados); // aqui unimos en una sola cadena separada por comas los elementos del array $parametrosFormateados
+
+                            $targetID = $element->target->id; //guarda el id de la flecha que coincide con el id de la casilla de activacion que contiene el nombre de la clase a la que pertenece el metodo que viaja en la flecha
+
+                            $nombreDeClaseAquePertenece = "";
+
+                            foreach ($elementos as $e) {
+                                if($e->type == 'standard.Rectangle'){
+                                    if($e->id == $targetID){
+                                        $nombreDeClaseAquePertenece = $e->attrs->headerText->text; 
+                                        break;
+                                    }
+                                }
+                            }
+
+
+
+
+                            $metodos[$nombreDeClaseAquePertenece][] = "public void {$nombreFuncion}({$var}){\n}";
+
+                            /* dd($metodos); */
+                            
+                        } 
+                    
+
+                   } 
+
+
+                   
+                }
+                
+            }
+            
+        } 
+
+
+        
+
+        /* dd($metodos); */
+
+        $nombresClases = array_values($clases);
+
+        /* dd($nombresClases); */
+
+
+
+
+        $formatoClase = [];
+
+        foreach ($nombresClases as $clase) {
+
+            $mayus = ucfirst($clase);
+            if(isset($metodos[$clase])){
+                $variable = implode("\n", $metodos[$clase]);
+                $formatoClase[$mayus]  = "public class {$mayus} { \n $variable\n}" ;
+            }else{
+                $formatoClase[$mayus]  = "public class {$mayus} {\n}" ;
+            }
+            
+
+        }
+
+        /* dd($formatoClase); */
+
+
+        //
+            $directorioDestino = "C:/Users/Pepe/Downloads/aquiC#/";
+
+            // Verifica si el directorio de destino existe y, si no, créalo
+            if (!is_dir($directorioDestino)) {
+                mkdir($directorioDestino, 0777, true);
+            }
+
+            foreach ($formatoClase as $key => $class) {
+                // Genera un nombre de archivo único para cada class
+                $nombreArchivo = $directorioDestino.$key.".cs";
+
+                // Abre el archivo para escritura
+                $archivo = fopen($nombreArchivo, 'w');
+
+                if ($archivo) {
+                    // Escribe el class en el archivo
+                    fwrite($archivo, $class);
+                    
+                    // Cierra el archivo
+                    fclose($archivo);
+                    
+                    
+                } 
+            }
+
+            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en C#');
+        //
+
+    }
+
+
+    public function generarDartCode(Diagrama $diagrama){
+        $nombre = $diagrama->nombre;
+        $contenido = json_decode($diagrama->contenido); //arroja en formato json la info de las componentes graficas del diagrama
+        
+        /* dd($contenido); */
+
+        $elementos = $contenido->cells; //especificamos la var elementos como la var que accedera a la info de los componentes
+        /* dd($elementos); */
+          
+        $clases = []; //declaramos un array para guardar el nombre de todas las clases que se generen del diagrama
+        $metodos = []; //declaramos un array para guardar el nombre de todas los metodos que se generen del diagrama
+
+        
+        foreach ($elementos as $element) { // vamos a recorrer el array de objetos que estan en formato json (componentes del diagrama)
+            if($element->type == 'standard.EmbeddedImage' or $element->type == 'erd.Entity'){ // preguntamos si el elemento es de tipo actor, boundary, control o entity 
+
+                if($element->type == 'standard.EmbeddedImage'){
+
+                    $clases[$element->id] = $element->attrs->headerText->text; //vamos a guardar en el array de clases, el nombre de la clase en la posicion determinada por el id del objeto
+
+                }else{
+                    $clases[$element->id] = $element->attrs->text->text;
+                }
+                /* dd($clases[$element->id]); */
+
+            }else if($element->type == 'app.Link'){  //preguntamos si el elemento es del tipo flecha o conector
+               
+                if(isset($element->id)){  // preguntamos si la flecha o connector tiene un atributo id y este no es nulo
+                  
+                   if(count($element->labels) > 0){ // preguntamos si la felcha o connector tiene una etiqueta(esa etiqueta representa una funcion/metodo)
+
+                        $cadenaMetodo = $element->labels[0]->attrs->text->text; //asignamos a una variable la cadena que representa a esa funcion/metodo
+
+                        // Patrón de expresión regular para encontrar el nombre de la función y los parámetros
+                        $patron = '/^(\w+)\(([^)]*)\)$/'; // validamos que la cadena tenga la forma: nombrefuncion(tipo parametro, tipo parametro)
+
+                        // Realizar la coincidencia con la expresión regular
+                        if (preg_match($patron, $cadenaMetodo, $coincidencias)) {  // preguntamos si la cadena que representa a la funcion/metodo cumple con el patron descrito 
+                            // El nombre de la función se encuentra en $coincidencias[1]
+                            $nombreFuncion = $coincidencias[1];
+
+                            // Los parámetros se encuentran en $coincidencias[2]
+                            $parametros = explode(',', $coincidencias[2]); // array de subcadenas llamado $parametros que guarda los parametros de la funcion/metodo
+
+                            $parametros = array_map('trim', $parametros); // eliminamos los espacios en blanco al principio y al final de cada parametro de la funcion/metodo y  lo volvemos a cqrgar en el array $parametros
+
+                            $parametrosFormateados = []; //declaramos una array vacio para guardar los parametros 'tipo parametro' con el formato de java
+
+                            foreach ($parametros as $parametro) { // recorremos el array $parametros 
+                                
+                                $arrayParametro = explode(' ', $parametro); // creamos un array de subcadenas donde guardamos el tipo del parametro y el parametro
+
+                                if( strtolower($arrayParametro[0]) == 'int'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "int {$arrayParametro[1]}"; // inserta en el array con la forma "int parametro"
+                                     
+                                }else if(strtolower($arrayParametro[0]) == 'String'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "string {$arrayParametro[1]}"; // inserta en el array con la forma "String parametro"
+
+                                }else if(strtolower($arrayParametro[0]) == 'bool'){ // convierte el primer elemento del arreglo en minusculas y compara
+
+                                    $parametrosFormateados[] = "bool {$arrayParametro[1]}"; // inserta en el array con la forma "boolean parametro"
+
+                                }
+                                
+                            }
+
+                            $var = implode(',', $parametrosFormateados); // aqui unimos en una sola cadena separada por comas los elementos del array $parametrosFormateados
+
+                            $targetID = $element->target->id; //guarda el id de la flecha que coincide con el id de la casilla de activacion que contiene el nombre de la clase a la que pertenece el metodo que viaja en la flecha
+
+                            $nombreDeClaseAquePertenece = "";
+
+                            foreach ($elementos as $e) {
+                                if($e->type == 'standard.Rectangle'){
+                                    if($e->id == $targetID){
+                                        $nombreDeClaseAquePertenece = $e->attrs->headerText->text; 
+                                        break;
+                                    }
+                                }
+                            }
+
+
+
+
+                            $metodos[$nombreDeClaseAquePertenece][] = "void {$nombreFuncion}({$var}){\n}";
+
+                            /* dd($metodos); */
+                            
+                        } 
+                    
+
+                   } 
+
+
+                   
+                }
+                
+            }
+            
+        } 
+
+
+        
+
+        /* dd($metodos); */
+
+        $nombresClases = array_values($clases);
+
+        /* dd($nombresClases); */
+
+
+
+
+        $formatoClase = [];
+
+        foreach ($nombresClases as $clase) {
+
+            $mayus = ucfirst($clase);
+            if(isset($metodos[$clase])){
+                $variable = implode("\n", $metodos[$clase]);
+                $formatoClase[$mayus]  = "class {$mayus} { \n $variable\n}" ;
+            }else{
+                $formatoClase[$mayus]  = "class {$mayus} {\n}" ;
+            }
+            
+
+        }
+
+        /* dd($formatoClase); */
+
+
+        //
+            $directorioDestino = "C:/Users/Pepe/Downloads/aquiDart/";
+
+            // Verifica si el directorio de destino existe y, si no, créalo
+            if (!is_dir($directorioDestino)) {
+                mkdir($directorioDestino, 0777, true);
+            }
+
+            foreach ($formatoClase as $key => $class) {
+                // Genera un nombre de archivo único para cada class
+                $nombreArchivo = $directorioDestino.$key.".dart";
+
+                // Abre el archivo para escritura
+                $archivo = fopen($nombreArchivo, 'w');
+
+                if ($archivo) {
+                    // Escribe el class en el archivo
+                    fwrite($archivo, $class);
+                    
+                    // Cierra el archivo
+                    fclose($archivo);
+                    
+                    
+                } 
+            }
+
+            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en DART');
+        //
+
+    }
+
+
+    
 }

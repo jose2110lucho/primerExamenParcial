@@ -72,10 +72,17 @@ Route::middleware('auth')->group(function () {
     Route::post('proyectos/terminado', [ProyectoController::class, 'terminado']);
     Route::resource('proyectos', ProyectoController::class);
     Route::put('Declinar-Proyecto/{proyecto}', [ProyectoController::class, 'declinar'])->name('proyectos.declinar');
+
+    
+
     Route::put('Banear-Proyecto/{proyecto}', [ProyectoController::class, 'banear'])->name('proyectos.banear');
     /* Diagramas */
     Route::post('diagramas/exportar', [DiagramaController::class, 'exportar'])->name('exportar');
     Route::post('diagramas/architec', [DiagramaController::class, 'architect'])->name('architect');
+
+    Route::post('diagramas/probandoesto', [DiagramaController::class, 'architect1'])->name('probandoesto');
+
+
     Route::get('diagramas/{diagrama}/descargar', [DiagramaController::class, 'descargar'])->name('diagramas.descargar');
     Route::put('Banear-Diagrama/{diagrama}', [DiagramaController::class, 'banear'])->name('diagramas.banear');
     Route::get('digramas/{diagrama}/usuarios', [DiagramaController::class, 'usuarios'])->name('diagramas.usuarios');
@@ -95,6 +102,17 @@ Route::middleware('auth')->group(function () {
     Route::post('notificar', [NotificacionController::class, 'notificar'])->name('notificar');
     Route::resource('notificaciones', NotificacionController::class);
     
+    //para el requerimiento funcional generar codigo
+    Route::get('diagramas/{diagrama}/script', [DiagramaController::class, 'script'])->name('diagramas.script');
+    Route::get('diagramas/{diagrama}/generarJavaCode', [DiagramaController::class, 'generarJavaCode'])->name('diagramas.generarJavaCode');
+    Route::get('diagramas/{diagrama}/generarCCode', [DiagramaController::class, 'generarCCode'])->name('diagramas.generarCCode');
+    Route::get('diagramas/{diagrama}/generarDartCode', [DiagramaController::class, 'generarDartCode'])->name('diagramas.generarDartCode');
+   
+
+    
+
 });
+
+
 
 require __DIR__.'/auth.php';
