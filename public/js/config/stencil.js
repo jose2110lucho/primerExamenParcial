@@ -16,6 +16,8 @@ App.config = App.config || {};
 
 (function() {
 
+    var origin = window.location.origin;
+
     'use strict';
 
     App.config.stencil = {};
@@ -47,7 +49,7 @@ App.config = App.config || {};
                 },
                 image: {
                     /* xlinkHref: `${person}` */
-                    xlinkHref: `http://c4diagram.test/assets/img/actor.jpg`
+                    xlinkHref: `${origin}/assets/img/actor.jpg`
                 },
                 header: {
                     stroke: '#31d0c6',
@@ -126,7 +128,7 @@ App.config = App.config || {};
                 },
                 image: {
                     /* xlinkHref: `${person}` */
-                    xlinkHref: `http://c4diagram.test/assets/img/boundary.jpg`
+                    xlinkHref: `${origin}/assets/img/boundary.jpg`
                 },
                 header: {
                     stroke: '#31d0c6',
@@ -205,7 +207,7 @@ App.config = App.config || {};
                 },
                 image: {
                     /* xlinkHref: `${person}` */
-                    xlinkHref: `http://c4diagram.test/assets/img/entity.jpg`
+                    xlinkHref: `${origin}/assets/img/entity.jpg`
                 },
                 header: {
                     stroke: '#31d0c6',
@@ -284,7 +286,7 @@ App.config = App.config || {};
                 },
                 image: {
                     /* xlinkHref: `${person}` */
-                    xlinkHref: `http://c4diagram.test/assets/img/control.jpg`
+                    xlinkHref: `${origin}/assets/img/control.jpg`
                 },
                 header: {
                     stroke: '#31d0c6',
@@ -1397,7 +1399,7 @@ App.config = App.config || {};
                 },
                 image: {
                     /* xlinkHref: `${person}` */
-                    xlinkHref: `http://c4diagram.test/assets/img/deleteMessage.png`
+                    xlinkHref: `${origin}/assets/img/deleteMessage.png`
                 },
                 header: {
                     stroke: '#31d0c6',
