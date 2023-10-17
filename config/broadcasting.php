@@ -41,7 +41,7 @@ return [
                 'useTLS' => true,
                 'host' => '3.128.184.156',
                 'port' => 6001,
-                'scheme' => 'http'
+                'scheme' => 'https'
             ],
         ],
 
