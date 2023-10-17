@@ -90,7 +90,7 @@
                                             <div class="card-body">
                                                 <div class="row align-items-center">
                                                     <div class="col-2">
-                                                        <img src="{{ asset('assets/img/UML_icon.png') }}"
+                                                        <img src="{{ asset('assets/img/diagrama_icon.png') }}"
                                                             alt="Food Deliver UI dashboards" class="rounded">
                                                     </div>
                                                     <div class="col">

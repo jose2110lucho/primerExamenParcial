@@ -50,7 +50,7 @@
                 <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center"
                     data-aos="fade-up">
                     <div>
-                        <h1>Diagramador colaborativo en tiempo real de clases UML</h1>
+                        <h1>Diagramador colaborativo en tiempo real de diagramas de secuencia UML</h1>
                         {{-- <h1>Estamos atentos a tus necesidades como desarrollador</h1>
                         <h2>Eficiencia en el desarrollo de diagramas en base al modelo C4</h2> --}}
                         {{-- <a href="#about" class="btn btn-success">Comenzar</a> --}}
