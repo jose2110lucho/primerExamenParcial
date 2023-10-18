@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Isset_;
 use SimpleXMLElement;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
+use ZipArchive;
 
 class DiagramaController extends Controller
 {
@@ -757,6 +760,8 @@ class DiagramaController extends Controller
 
 
     public function generarJavaCode(Diagrama $diagrama){
+
+        
         $nombre = $diagrama->nombre;
         $contenido = json_decode($diagrama->contenido); //arroja en formato json la info de las componentes graficas del diagrama
         
@@ -830,8 +835,24 @@ class DiagramaController extends Controller
 
                             $nombreDeClaseAquePertenece = "";
 
+
+
+                            //-----------aqui meti codigo ---------
+                            $loopDetected = false;
+                            $condition = "";
+                             //-----------aqui meti codigo ---------
                             foreach ($elementos as $e) {
                                 if($e->type == 'standard.Rectangle'){
+
+                                    //-------------------aqui meti codigo------------------------------------
+                                    if($e->attrs->headerText->text == 'Loop'){
+                                        
+                                        $loopDetected = true;
+                                        $condition = $e->attrs->subHeaderText->text;
+
+                                    }
+                                    //---------------------aqui meti codigo----------------------------------
+
                                     if($e->id == $targetID){
                                         $nombreDeClaseAquePertenece = $e->attrs->headerText->text; 
                                         break;
@@ -877,8 +898,21 @@ class DiagramaController extends Controller
 
             $mayus = ucfirst($clase);
             if(isset($metodos[$clase])){
-                $variable = implode("\n", $metodos[$clase]);
-                $formatoClase[$mayus]  = "public class {$mayus} { \n $variable\n}" ;
+                //---------------------------------------------------------------------------------------------
+                if($loopDetected){
+
+                    $variable = implode("\n", $metodos[$clase]);
+                    $formatoClase[$mayus]  = "public class {$mayus} { \n while($condition){ $variable\n} \n}" ;
+
+                }else{
+                    //---------------------------------------------------------------------------------------------
+                     $variable = implode("\n", $metodos[$clase]);
+                     $formatoClase[$mayus]  = "public class {$mayus} { \n $variable\n}" ;
+
+                }
+                //---------------------------------------------------------------------------------------------
+
+                
             }else{
                 $formatoClase[$mayus]  = "public class {$mayus} {\n}" ;
             }
@@ -890,7 +924,37 @@ class DiagramaController extends Controller
 
 
         //
-            $directorioDestino = "C:/Users/Pepe/Downloads/aqui/";
+            /* $directorioDestino = "C:/Users/Pepe/Downloads/aqui/"; */
+
+
+
+
+
+            $directorioDestino = storage_path('app/public/exporter/');
+            $nombreZip = 'codigo_java_exportado.zip';
+            
+            $zip = new ZipArchive();
+            
+            if ($zip->open($directorioDestino . $nombreZip, ZipArchive::CREATE) === true) {
+                foreach ($formatoClase as $key => $class) {
+                    // Genera un nombre de archivo único para cada clase en el ZIP
+                    $nombreArchivo = $key . ".java";
+            
+                    // Agrega la clase al archivo ZIP
+                    $zip->addFromString($nombreArchivo, $class);
+                }
+                $zip->close();
+                // Descarga el archivo ZIP
+                return response()->download($directorioDestino . $nombreZip)->deleteFileAfterSend(true);
+            } else {
+                return redirect()->back()->with('message', 'Error al crear el archivo ZIP.');
+            }
+
+
+
+
+            /* $directorioDestino = storage_path('app/public/exporter/');
+
 
             // Verifica si el directorio de destino existe y, si no, créalo
             if (!is_dir($directorioDestino)) {
@@ -914,7 +978,7 @@ class DiagramaController extends Controller
                     
                 } 
             }
-            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en JAVA');
+            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en JAVA'); */
         //
 
     }
@@ -1053,7 +1117,31 @@ class DiagramaController extends Controller
 
 
         //
-            $directorioDestino = "C:/Users/Pepe/Downloads/aquiC#/";
+
+        $directorioDestino = storage_path('app/public/exporter/');
+            $nombreZip = 'codigo_C_exportado.zip';
+            
+            $zip = new ZipArchive();
+            
+            if ($zip->open($directorioDestino . $nombreZip, ZipArchive::CREATE) === true) {
+                foreach ($formatoClase as $key => $class) {
+                    // Genera un nombre de archivo único para cada clase en el ZIP
+                    $nombreArchivo = $key . ".cs";
+            
+                    // Agrega la clase al archivo ZIP
+                    $zip->addFromString($nombreArchivo, $class);
+                }
+                $zip->close();
+                // Descarga el archivo ZIP
+                return response()->download($directorioDestino . $nombreZip)->deleteFileAfterSend(true);
+            } else {
+                return redirect()->back()->with('message', 'Error al crear el archivo ZIP.');
+            }
+
+
+
+
+            /* $directorioDestino = "C:/Users/Pepe/Downloads/aquiC#/";
 
             // Verifica si el directorio de destino existe y, si no, créalo
             if (!is_dir($directorioDestino)) {
@@ -1079,7 +1167,7 @@ class DiagramaController extends Controller
             }
 
             return redirect()->back()->with('message', 'se han generado exitosamente los archivos en C#');
-        //
+        // */
 
     }
 
@@ -1218,7 +1306,34 @@ class DiagramaController extends Controller
 
 
         //
-            $directorioDestino = "C:/Users/Pepe/Downloads/aquiDart/";
+
+        $directorioDestino = storage_path('app/public/exporter/');
+            $nombreZip = 'codigo_dart_exportado.zip';
+            
+            $zip = new ZipArchive();
+            
+            if ($zip->open($directorioDestino . $nombreZip, ZipArchive::CREATE) === true) {
+                foreach ($formatoClase as $key => $class) {
+                    // Genera un nombre de archivo único para cada clase en el ZIP
+                    $nombreArchivo = $key . ".dart";
+            
+                    // Agrega la clase al archivo ZIP
+                    $zip->addFromString($nombreArchivo, $class);
+                }
+                $zip->close();
+                // Descarga el archivo ZIP
+                return response()->download($directorioDestino . $nombreZip)->deleteFileAfterSend(true);
+            } else {
+                return redirect()->back()->with('message', 'Error al crear el archivo ZIP.');
+            }
+
+
+
+
+
+
+
+            /* $directorioDestino = "C:/Users/Pepe/Downloads/aquiDart/";
 
             // Verifica si el directorio de destino existe y, si no, créalo
             if (!is_dir($directorioDestino)) {
@@ -1243,7 +1358,7 @@ class DiagramaController extends Controller
                 } 
             }
 
-            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en DART');
+            return redirect()->back()->with('message', 'se han generado exitosamente los archivos en DART'); */
         //
 
     }
