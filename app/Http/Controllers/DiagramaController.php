@@ -931,6 +931,9 @@ class DiagramaController extends Controller
 
 
             $directorioDestino = storage_path('app/public/exporter/');
+            if (!is_dir($directorioDestino)) {
+                mkdir($directorioDestino, 0777, true);
+            }
             $nombreZip = 'codigo_java_exportado.zip';
             
             $zip = new ZipArchive();
@@ -1119,6 +1122,9 @@ class DiagramaController extends Controller
         //
 
         $directorioDestino = storage_path('app/public/exporter/');
+        if (!is_dir($directorioDestino)) {
+            mkdir($directorioDestino, 0777, true);
+        }
             $nombreZip = 'codigo_C_exportado.zip';
             
             $zip = new ZipArchive();
@@ -1308,6 +1314,9 @@ class DiagramaController extends Controller
         //
 
         $directorioDestino = storage_path('app/public/exporter/');
+            if (!is_dir($directorioDestino)) {
+                mkdir($directorioDestino, 0777, true);
+            }
             $nombreZip = 'codigo_dart_exportado.zip';
             
             $zip = new ZipArchive();
